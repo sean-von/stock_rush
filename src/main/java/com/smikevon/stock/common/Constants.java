@@ -8,4 +8,6 @@ public class Constants {
 		public static final String STOCK_INFO_INDEX = Config.init().gets("STOCK_INFO_INDEX");
 		public static final String BIG_DEAL_INDEX = Config.init().gets("BIG_DEAL_INDEX");
 	}
+
+    public static final int PAGE_SIZE = 100;
 }

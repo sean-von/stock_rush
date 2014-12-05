@@ -138,7 +138,6 @@ public class LargeDealAyalysisTask {
 			StockDataCrawl.CrawlStockInfo(type, keyword[i],stocks);
 		}
 		logger.info(stocks.size());
-		logger.info(stocks.keySet());
 	}
 	
 	/**
@@ -151,7 +150,6 @@ public class LargeDealAyalysisTask {
 			while (iterator.hasNext()) {
 				StockDataCrawl.crawlCapitalization(iterator.next(), stocks);
 			}
-			
 		}catch (Exception e) {
 			logger.error(e.getMessage());
 		}

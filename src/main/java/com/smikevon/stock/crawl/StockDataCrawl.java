@@ -121,8 +121,10 @@ public class StockDataCrawl {
 	
 	public static void main(String[] args){
 		try{
-			//CrawlStockInfo("HS","d",LargeDealAyalysisTask.stocks);
-			crawlCapitalization("000885",LargeDealAyalysisTask.stocks);
+			CrawlStockInfo("HS","d",LargeDealAyalysisTask.stocks);
+            logger.info(LargeDealAyalysisTask.stocks.toString());
+			//crawlCapitalization("000885",LargeDealAyalysisTask.stocks);
+
 		}catch (Exception e) {
 			logger.error(e.getMessage());
 		}finally{
