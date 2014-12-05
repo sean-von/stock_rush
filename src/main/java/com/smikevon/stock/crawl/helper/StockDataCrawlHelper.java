@@ -113,7 +113,6 @@ public class StockDataCrawlHelper {
 	/**
 	 * 对结果进行排序并打印
 	 * @param codeMap
-	 * @param size
 	 */
 	public static List<Entry<String, Double>> sortMapByVale(Map<String,Double> codeMap){
 		List<Entry<String, Double>> list = new LinkedList<Entry<String,Double>>(codeMap.entrySet());
@@ -137,7 +136,7 @@ public class StockDataCrawlHelper {
 	
 	/**
 	 * 打印排序后数据
-	 * @param map
+	 * @param list
 	 * @param size
 	 */
 	public static void printTop(List<Entry<String, Double>> list,int size){

@@ -50,13 +50,8 @@ public class LargeDealAyalysisTask {
 			/*BigDealSearcher searcher = new BigDealSearcher();
 			List list = searcher.get(0, 100000).getResult();*/
 			
-		
-			
 			getAllStockInfo();
-			
 			storeQuantityInfo();
-			
-			
 			
 			// 获取成交量 ，买盘-卖盘 最高的前十支股票
 			logger.info("买盘-卖盘Top10：");
@@ -114,7 +109,7 @@ public class LargeDealAyalysisTask {
 				if(pageNo==0){
 					pageCount = Integer.parseInt(String.valueOf(params.get("pagecount")));
 					logger.info("pageCount:"+pageCount);
-					pageCount = 20;
+					pageCount = 5;
 				}
 				pageNo++;
 			} while (pageNo<pageCount);
@@ -138,7 +133,7 @@ public class LargeDealAyalysisTask {
 	 */
 	public static void getAllStockInfo() throws Exception{
 		String[] keyword = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"};
-		String type = "HS"; 
+		String type = "HS";
 		for (int i = 0; i < keyword.length; i++) {
 			StockDataCrawl.CrawlStockInfo(type, keyword[i],stocks);
 		}
