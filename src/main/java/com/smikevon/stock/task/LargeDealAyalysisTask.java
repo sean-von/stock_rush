@@ -1,5 +1,6 @@
 package com.smikevon.stock.task;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +10,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.smikevon.stock.crawl.CrawlPageWorkerFactory;
+import com.smikevon.stock.util.JsonUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.smikevon.stock.crawl.StockDataCrawl;
@@ -23,6 +27,8 @@ public class LargeDealAyalysisTask {
 	
 	private static final Logger logger = Logger.getLogger(LargeDealAyalysisTask.class);
 	private static int pagesize = 2000;
+    
+    private static final String STOCK_FILE = "stocks.info";
 	
 	
 	//存储所有的股票
@@ -40,18 +46,18 @@ public class LargeDealAyalysisTask {
 	 * &count=25
 	 * &type=query
 	 * &callback=callback_1193232208
-	 * &req=31411
+	 * &req=31411http://mvnrepository.com/artifact/log4j/log4j
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) {
 		try{
 			
-			List list = getDealList(getDateInfo());
+			//List list = getDealList(getDateInfo());
 			/*BigDealSearcher searcher = new BigDealSearcher();
 			List list = searcher.get(0, 100000).getResult();*/
-			
+            List list = CrawlPageWorkerFactory.crawl(getDateInfo());
 			getAllStockInfo();
-			storeQuantityInfo();
+            storeQuantityInfo();
 			
 			// 获取成交量 ，买盘-卖盘 最高的前十支股票
 			logger.info("买盘-卖盘Top10：");
@@ -109,7 +115,7 @@ public class LargeDealAyalysisTask {
 				if(pageNo==0){
 					pageCount = Integer.parseInt(String.valueOf(params.get("pagecount")));
 					logger.info("pageCount:"+pageCount);
-					pageCount = 5;
+					//pageCount = 5;
 				}
 				pageNo++;
 			} while (pageNo<pageCount);
@@ -132,13 +138,17 @@ public class LargeDealAyalysisTask {
 	 * 外汇FX
 	 */
 	public static void getAllStockInfo() throws Exception{
-		String[] keyword = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"};
-		String type = "HS";
-		for (int i = 0; i < keyword.length; i++) {
-			StockDataCrawl.CrawlStockInfo(type, keyword[i],stocks);
-		}
-		logger.info(stocks.size());
-	}
+        if(!FileUtils.getFile(STOCK_FILE).exists()){
+            String[] keyword = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"};
+            String type = "HS";
+            for (int i = 0; i < keyword.length; i++) {
+                StockDataCrawl.CrawlStockInfo(type, keyword[i],stocks);
+            }
+            String json = JsonUtils.obj2json(stocks);
+            FileUtils.writeByteArrayToFile(FileUtils.getFile(STOCK_FILE),json.getBytes());
+        }
+        stocks = (Map)JsonUtils.json2obj(FileUtils.readFileToString(FileUtils.getFile(STOCK_FILE)),stocks.getClass());
+    }
 	
 	/**
 	 * 存储一下总股本

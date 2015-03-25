@@ -1,10 +1,7 @@
 package com.smikevon.stock.crawl;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.smikevon.stock.task.LargeDealAyalysisTask;
+import com.smikevon.stock.util.JsonUtils;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -15,8 +12,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.smikevon.stock.task.LargeDealAyalysisTask;
-import com.smikevon.stock.util.JsonUtil;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class StockDataCrawl {
 	
@@ -90,8 +90,9 @@ public class StockDataCrawl {
 		body = getMethod.getResponseBody();
 		String result = new String(body,"GBK");
 		result = result.replaceAll("_ntes_stocksearch_callback\\((.*)\\)$", "$1");
-		//Map map = JsonUtil.strToMap(result);
-		List<Map<String,String>> list = JsonUtil.strToList(result);
+        List<Map> list = new LinkedList<Map>();
+	    Object obj = JsonUtils.json2obj(result,list.getClass());
+        list.addAll((List)obj);
 		for(int i=0;i<list.size();i++){
 			String symbol = list.get(i).get("symbol").toString();
 			stocks.put(symbol, list.get(i));

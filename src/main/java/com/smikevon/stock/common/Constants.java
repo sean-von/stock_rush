@@ -9,5 +9,7 @@ public class Constants {
 		public static final String BIG_DEAL_INDEX = Config.init().gets("BIG_DEAL_INDEX");
 	}
 
-    public static final int PAGE_SIZE = 100;
+    public static final int PAGE_SIZE = 1000;
+    
+    public static final int WORKER_CRAWL_PAGE_NUMBER = 4;
 }

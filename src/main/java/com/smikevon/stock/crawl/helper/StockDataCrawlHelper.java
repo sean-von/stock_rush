@@ -1,5 +1,9 @@
 package com.smikevon.stock.crawl.helper;
 
+import com.smikevon.stock.util.JsonUtils;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
@@ -9,10 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.sf.json.JSONObject;
-
-import org.apache.log4j.Logger;
 
 /**
  * 
@@ -34,11 +34,18 @@ public class StockDataCrawlHelper {
 		if (json == null || json.length() == 0){
 			return new HashMap();
 		}
-		Map<String, Class> classMap = new HashMap<String, Class>();
-		classMap.put("list", Map.class);
-		JSONObject jsonObj = JSONObject.fromObject(json);
-		return (Map) JSONObject.toBean(jsonObj, Map.class,classMap);
-	}
+		Map<String, Object> map = new HashMap<String, Object>();
+		//classMap.put("list", Map.class);
+        //(Map)JsonUtils.json2obj(json,Map.class.getClass());
+		//JSONObject jsonObj = JSONObject.fromObject(json);
+        //System.out.println("Map"+json);
+        try {
+            return (Map)JsonUtils.json2obj(json, map.getClass());
+        } catch (IOException e) {
+            logger.error("can not convert json to message " + e.getMessage());
+        }
+        return null;
+    }
 	
 	/**
 	 * 对大单交易进行统计
